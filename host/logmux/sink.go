@@ -76,7 +76,7 @@ func (s *SinkHTTPAPI) GetSinks(w http.ResponseWriter, req *http.Request, ps http
 		sinks = append(sinks, &ct.Sink{
 			ID:          info.ID,
 			Kind:        info.Kind,
-			Config:      info.Config,
+			Config:      &info.Config,
 			HostManaged: info.HostManaged,
 		})
 	}
@@ -180,7 +180,7 @@ type SinkInfo struct {
 	ID          string            `json:"id"`
 	Kind        ct.SinkKind       `json:"kind"`
 	Cursor      *utils.HostCursor `json:"cursor,omitempty"`
-	Config      []byte            `json:"config"`
+	Config      json.RawMessage   `json:"config"`
 	HostManaged bool              `json:"host_managed"`
 }
 

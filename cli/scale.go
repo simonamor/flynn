@@ -28,7 +28,7 @@ web=3,active=true      # 3 web processes, distributed amongst hosts tagged activ
 db=3,disk=ssd,mem=high # 3 db processes, distributed amongst hosts tagged with
                        # both disk=ssd and mem=high
 
-Ommitting the arguments will show the current scale.
+Omitting the arguments will show the current scale.
 
 Options:
 	-n, --no-wait            don't wait for the scaling events to happen
@@ -204,9 +204,13 @@ func runScaleWithJobEvents(client controller.Client, app string, release *ct.Rel
 
 	currentProcs := formation.Processes
 	currentTags := formation.Tags
+
 	for k, v := range currentProcs {
-		processes[k] = v
+		if _, ok := processes[k]; !ok {
+			processes[k] = v
+		}
 	}
+
 	formation.Processes = processes
 	formation.Tags = tags
 

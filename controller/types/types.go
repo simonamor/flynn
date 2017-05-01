@@ -665,6 +665,7 @@ type ImageLayer struct {
 	Type   ImageLayerType    `json:"type,omitempty"`
 	Length int64             `json:"length,omitempty"`
 	Hashes map[string]string `json:"hashes,omitempty"`
+	Meta   map[string]string `json:"meta,omitempty"`
 }
 
 type ImagePullInfo struct {
@@ -689,12 +690,12 @@ const (
 )
 
 type Sink struct {
-	ID          string          `json:"id"`
-	Kind        SinkKind        `json:"kind"`
-	HostManaged bool            `json:"host_managed,omitempty"`
-	Config      json.RawMessage `json:"config,omitempty"`
-	CreatedAt   *time.Time      `json:"created_at,omitempty"`
-	UpdatedAt   *time.Time      `json:"updated_at,omitempty"`
+	ID          string           `json:"id"`
+	Kind        SinkKind         `json:"kind"`
+	HostManaged bool             `json:"host_managed,omitempty"`
+	Config      *json.RawMessage `json:"config,omitempty"`
+	CreatedAt   *time.Time       `json:"created_at,omitempty"`
+	UpdatedAt   *time.Time       `json:"updated_at,omitempty"`
 }
 
 type SyslogFormat string

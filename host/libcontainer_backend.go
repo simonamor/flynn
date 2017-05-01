@@ -85,6 +85,10 @@ func NewLibcontainerBackend(config *LibcontainerConfig) (Backend, error) {
 		return nil, err
 	}
 
+	if err := forceMemoryOvercommit(); err != nil {
+		return nil, err
+	}
+
 	defaultTmpfs, err := createTmpfs(resource.DefaultTempDiskSize)
 	if err != nil {
 		return nil, err
@@ -1605,4 +1609,18 @@ func createTmpfs(size int64) (*Tmpfs, error) {
 	}
 
 	return &Tmpfs{Path: f.Name(), Size: size}, nil
+}
+
+func forceMemoryOvercommit() error {
+	path := "/proc/sys/vm/overcommit_memory"
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	if !bytes.HasPrefix(data, []byte("1")) {
+		if err := ioutil.WriteFile(path, []byte("1"), 0640); err != nil {
+			return fmt.Errorf("error forcing overcommit: %s", err)
+		}
+	}
+	return nil
 }
